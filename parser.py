@@ -1,33 +1,36 @@
+class Parser():
 
-def parse(self, inputfile):
-    """ Retorna una llista de llistes, amb les clausules, si hi ha algun error,
-        retorna error. 
-    """
-    
-    num_clauses = 0
-    num_vars = 0
-    clauses = []
-    parse(inputfile)
+    def __init__(self, inputfile):
+        self.num_vars = 0
+        self.clauses = []
+        self.parse(inputfile)
 
-    with open(inputfile) as f:
-        for line in f:
-            if line[0] == "c":
-                continue
+    def parse(self, inputfile):
+        """ Retorna una llista de llistes, amb les clausules, si hi ha algun error,
+            retorna error. 
+        """
+        
+        num_clauses = 0
 
-            if line[0] == "p":
-                if line[1] != 'cnf':
-                    return None
+        with open(inputfile) as f:
+            for line in f:
+                if line[0] == "c":
+                    continue
 
-                num_clauses = int(line[3])
+                if line[0] == "p":
+                    if line[1] != 'cnf':
+                        return None
+
+                    num_clauses = int(line[3])
+                    linesplit = line.split()
+                    self.num_vars = int(linesplit[2])
+                    continue
+
                 linesplit = line.split()
-                num_vars = int(linesplit[2])
-                continue
+                linesplit.pop()
+                self.clauses.append(list(map(int, linesplit)))
 
-            linesplit = line.split()
-            linesplit.pop()
-            clauses.append(list(map(int, linesplit)))
+        if len(self.clauses) != num_clauses:
+            return None
 
-    if len(clauses) != num_clauses:
-        return None
-
-    return clauses
+        return self.clauses
