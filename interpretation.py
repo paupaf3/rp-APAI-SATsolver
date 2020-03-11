@@ -1,15 +1,20 @@
 from random import random
+import sys
 
 
 class Interpretation:
 
-    def __init__(self, num_vars, vars_values=None):
-        self.num_vars = num_vars
-        if vars_values is None:
+    def __init__(self, num_vars=0, vars=None):
+        if vars is None:
             self.vars = list(range(1, num_vars + 1))
+            self.num_vars = len(self.vars)
             self.get_random_interpretation()
         else:
-            self.vars = vars_values
+            self.vars = vars
+        if num_vars != 0:
+            self.num_vars = num_vars
+        else:
+            self.num_vars = len(self.vars)
 
     def get_random_interpretation(self):
         for i in range(self.num_vars):
@@ -53,4 +58,9 @@ class Interpretation:
         return copy
 
     def show(self):
-        print(self.vars)
+        for var in self.vars:
+            sys.stdout.write(str(var) + " ")
+        sys.stdout.write('0\n')
+
+    def is_solution(self, problem):
+        return self.cost(problem) == 0

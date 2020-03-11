@@ -8,7 +8,7 @@ max_tries = 100000
 class Solver:
 
     def __init__(self, input_data):
-        self.best_interpretation = interpretation.Interpretation(input_data.num_vars)
+        self.best_interpretation = interpretation.Interpretation(num_vars=input_data.num_vars)
         self.problem = input_data.clauses
         self.best_cost = self.best_interpretation.cost(self.problem)
 
@@ -19,12 +19,12 @@ class Solver:
                 if neighbour.cost(self.problem) < self.best_cost:
                     self.best_interpretation = neighbour
                     self.best_cost = self.best_interpretation.cost(self.problem)
-                    if self.best_cost == 0:
-                        return self.best_interpretation.vars
-        return self.best_interpretation.vars
+        return self.best_interpretation
 
     def show(self):
-        print(self.best_interpretation)
+        print("c SAT")
+        print("s SATISFIABLE")
+        self.best_interpretation.show()
 
 
 if __name__ == '__main__':
@@ -34,5 +34,5 @@ if __name__ == '__main__':
     parser = parser.Parser(sys.argv[1])
     solver = Solver(parser)
     solution = solver.solve()
-    print(solver.problem)
-    print(solution)
+    solver.show()
+    print(solution.is_solution(solver.problem))
