@@ -35,4 +35,4 @@ if __name__ == '__main__':
     solver = Solver(parser)
     solution = solver.solve()
     solver.show()
-    print(solution.is_solution(solver.problem))
+    #print(solution.is_solution(solver.problem))
