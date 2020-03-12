@@ -18,11 +18,8 @@ class Parser():
                     continue
 
                 if line[0] == "p":
-                    if line[1] != 'cnf':
-                        return None
-
-                    num_clauses = int(line[3])
                     linesplit = line.split()
+                    num_clauses = int(linesplit[3])
                     self.num_vars = int(linesplit[2])
                     continue
 
@@ -31,6 +28,4 @@ class Parser():
                 self.clauses.append(list(map(int, linesplit)))
 
         if len(self.clauses) != num_clauses:
-            return None
-
-        return self.clauses
+            print("Error on number of clauses")

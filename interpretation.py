@@ -1,4 +1,4 @@
-from random import random
+from random import random, randrange
 import sys
 
 
@@ -8,7 +8,6 @@ class Interpretation:
         if vars is None:
             self.vars = list(range(1, num_vars + 1))
             self.num_vars = len(self.vars)
-            self.get_random_interpretation()
         else:
             self.vars = vars
         if num_vars != 0:
@@ -30,7 +29,7 @@ class Interpretation:
             neighbours.append(Interpretation(neighbour.num_vars, neighbour.vars))
         return neighbours
 
-    def best_neighbour(self, problem):
+    def best_neighbour(self, problem):  # Steepest ascent climb
         neighbours = self.get_neighbours()
         best_neighbour = neighbours[0]
         best_cost = best_neighbour.cost(problem)
@@ -38,6 +37,11 @@ class Interpretation:
             if elem.cost(problem) < best_cost:
                 best_neighbour = elem
         return best_neighbour
+
+    def random_walk(self):
+        neighbours = self.get_neighbours()
+        i = randrange(0, len(neighbours) + 1, 1)
+        return neighbours[i]
 
     def cost(self, problem):
         cost = 0
