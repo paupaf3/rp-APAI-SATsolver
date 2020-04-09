@@ -1,13 +1,15 @@
-from random import random, randrange
+from random import random
 import sys
 
 
 class Interpretation:
+    problem = []  # Static variable to represent the problem variables
 
     def __init__(self, num_vars=0, vars=None):
         if vars is None:
             self.vars = list(range(1, num_vars + 1))
             self.num_vars = len(self.vars)
+            self.get_random_interpretation()
         else:
             self.vars = vars
         if num_vars != 0:
@@ -29,23 +31,18 @@ class Interpretation:
             neighbours.append(Interpretation(neighbour.num_vars, neighbour.vars))
         return neighbours
 
-    def best_neighbour(self, problem):  # Steepest ascent climb
+    def best_neighbour(self):
         neighbours = self.get_neighbours()
         best_neighbour = neighbours[0]
-        best_cost = best_neighbour.cost(problem)
+        best_cost = best_neighbour.cost()
         for elem in neighbours:
-            if elem.cost(problem) < best_cost:
+            if elem.cost() < best_cost:
                 best_neighbour = elem
         return best_neighbour
 
-    def random_walk(self):
-        neighbours = self.get_neighbours()
-        i = randrange(0, len(neighbours) + 1, 1)
-        return neighbours[i]
-
-    def cost(self, problem):
+    def cost(self):
         cost = 0
-        for clause in problem:
+        for clause in self.problem:
             length = self.num_vars
             for var in self.vars:
                 if var in clause:
@@ -66,5 +63,5 @@ class Interpretation:
             sys.stdout.write(str(var) + " ")
         sys.stdout.write('0\n')
 
-    def is_solution(self, problem):
-        return self.cost(problem) == 0
+    def is_solution(self):
+        return self.cost() == 0

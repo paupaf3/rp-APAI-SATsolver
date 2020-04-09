@@ -1,46 +1,40 @@
-#!/usr/bin/python3
 import sys
-import parser
-import interpretation
+from parser import Parser
+from interpretation import Interpretation
 
-max_tries = 5000
+max_tries = 100000
 
 
 class Solver:
 
     def __init__(self, input_data):
-        self.interpretation = interpretation.Interpretation(num_vars=input_data.num_vars)
-        self.problem = input_data.clauses
-        self.cost = 0
+        Interpretation.problem = input_data.clauses  # Set static variable problem for Interpretation class
 
-    def random_search(self):
-        current_int = self.interpretation.copy()
+        self.best_interpretation = Interpretation(num_vars=input_data.num_vars)
+        self.best_cost = self.best_interpretation.cost()
+
+    def solve(self):  # Greedy search with random initialisation, finding the best neighbour every time
         for i in range(max_tries):
-            current_int.get_random_interpretation()
-            current_cost = current_int.cost(self.problem)
-            if current_cost == 0:
-                self.interpretation = current_int.copy()
-                self.cost = current_cost
-                return self.interpretation
-        self.interpretation = current_int.copy()
-        self.cost = current_cost
+            if self.best_cost != 0:
+                neighbour = self.best_interpretation.best_neighbour()
+                if neighbour.cost() < self.best_cost:
+                    self.best_interpretation = neighbour
+                    self.best_cost = self.best_interpretation.cost()
+        return self.best_interpretation
 
     def show(self):
-        if self.cost == 0:
-            print("c SAT")
-            print("s SATISFIABLE")
-            sys.stdout.write('v ')
-            self.interpretation.show()
-        else:
-            print("No solution found")
+        print("c SAT")
+        print("s SATISFIABLE")
+        self.best_interpretation.show()
 
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         sys.exit("Incorrect number of arguments, usage: ./solver.py 'input_file'\n")
 
-    parser = parser.Parser(sys.argv[1])
+    parser = Parser(sys.argv[1])
     solver = Solver(parser)
-    solution = solver.random_search()
+    solution = solver.solve()
+    print(Interpretation.problem)
     solver.show()
-    #print(solution.is_solution(solver.problem))
+    print(solution.is_solution())
