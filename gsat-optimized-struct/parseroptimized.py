@@ -2,13 +2,13 @@ class Parser():
 
     def __init__(self, inputfile):
         self.num_vars = 0
-        self.clauses = []
+        self.num_clauses = 0
+        self.vars = []
         self.parse(inputfile)
 
     def parse(self, inputfile):
 
-        num_clauses = 0
-        count = 0
+        clause = 0
 
         with open(inputfile) as file:
             for line in file:
@@ -18,29 +18,24 @@ class Parser():
 
                 if line[0] == "p":
                     linesplit = line.split()
-                    num_clauses = int(linesplit[3])
+                    self.num_clauses = int(linesplit[3])
                     self.num_vars = int(linesplit[2])
-                    clauses = [None] * num_vars * 2
+                    self.vars = [None] * self.num_vars * 2
                     continue
 
-                count += 1
+                clause += 1
                 linesplit = line.split()
                 linesplit.pop()
 
                 for literal in linesplit:
                     literal = int(literal)
                     if str(literal).startswith('-'):
-                        if self.clauses[literal] == None:
-                            self.clauses[literal] = [count]
+                        if self.vars[literal] == None:
+                            self.vars[literal] = [clause]
                         else:
-                            self.clauses[literal].append(count)
+                            self.vars[literal].append(clause)
                     else:
-                        if self.clauses[literal-1] == None:
-                            self.clauses[literal-1] = [count]
+                        if self.vars[literal-1] == None:
+                            self.vars[literal-1] = [clause]
                         else:
-                            self.clauses[literal-1].append(count)
-
-            if len(self.clauses) != num_clauses:
-                return None
-
-            return self.clauses
+                            self.vars[literal-1].append(clause)
