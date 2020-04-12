@@ -65,3 +65,17 @@ class Interpretation:
 
     def is_solution(self):
         return self.cost() == 0
+
+    def get_unsat_clause(self):
+        for clause in self.problem:
+            length = self.num_vars
+            for var in self.vars:
+                if var in clause:
+                    break
+                else:
+                    length -= 1
+                if length == 0:
+                    return clause
+
+    def flip(self, var):
+        self.vars[abs(var) - 1] *= -1

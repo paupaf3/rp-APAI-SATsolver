@@ -30,7 +30,7 @@ class Solver:
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        sys.exit("Incorrect number of arguments, usage: ./solver.py 'input_file'\n")
+        sys.exit("Incorrect number of arguments, usage: ./greedy_solver.py 'input_file'\n")
 
     parser = Parser(sys.argv[1])
     solver = Solver(parser)
