@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import sys
 from parser import Parser
 from interpretation import Interpretation
@@ -63,6 +65,4 @@ if __name__ == '__main__':
     parser = Parser(sys.argv[1])
     solver = Solver(parser)
     solution = solver.solve()
-    print(Interpretation.problem)
     solver.show()
-    print(solution.is_solution())

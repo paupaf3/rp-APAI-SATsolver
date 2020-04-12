@@ -59,6 +59,7 @@ class Interpretation:
         return copy
 
     def show(self):
+        sys.stdout.write('v ')
         for var in self.vars:
             sys.stdout.write(str(var) + " ")
         sys.stdout.write('0\n')
