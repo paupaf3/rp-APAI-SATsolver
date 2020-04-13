@@ -1,0 +1,15 @@
+
+--------------- P = 0.5 MAX_TRIES = 10000 MAX_FLIPS = 10000 -----------------------------
+
+Total time = 483.43 (EASY + HARD)
+640-1280 en resol algunes, amb temps superiors a 5 i 6 segons
+2560-5120 no en resol cap
+1280-2560 en resol molt poques
+
+EASY - Total time = 10.29
+HARD - Total time = 468.57 (Execució nova)
+
+--------------- P = 0.8 MAX_TRIES = 10000 MAX_FLIPS = 10000 -----------------------------
+
+EASY - Total time = 12.47
+HARD - Total time = 469.47

@@ -28,7 +28,7 @@ class Solver:
                     self.best_interpretation.flip(var)
                     flips_cost.append(self.best_interpretation.cost())
                     self.best_interpretation.flip(var)
-                if min(flips_cost) > 0 and random() < 0.5:  # Random walk
+                if min(flips_cost) > 0 and random() < 0.8:  # Random walk
                     self.best_interpretation.flip(choice(unsat_clause))
                 else:
                     self.best_interpretation.flip(unsat_clause[flips_cost.index(min(flips_cost))])  # Flip the
