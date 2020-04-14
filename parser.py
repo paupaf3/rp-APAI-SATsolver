@@ -2,6 +2,7 @@ class Parser:
 
     def __init__(self, inputfile):
         self.num_vars = 0
+        self.num_clauses = 0
         self.clauses = []
         self.parse(inputfile)
 
@@ -17,6 +18,7 @@ class Parser:
 
                 if line[0] == "p":
                     line_split = line.split()
+                    self.num_clauses = int(line_split[3])
                     self.num_vars = int(line_split[2])
                     continue
 

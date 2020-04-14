@@ -12,6 +12,11 @@ max_flips = 2000
 class Solver:
 
     def __init__(self, input_data):
+        self.ratio = input_data.num_clauses / input_data.num_vars
+        if self.ratio > 5.5:
+            self.p = 1
+        else:
+            self.p = 0.8
         Interpretation.problem = input_data.clauses  # Set static variable problem for Interpretation class
         Interpretation.var_distribution = [None] * 2 * input_data.num_vars
         self.distribute_vars()
@@ -30,7 +35,7 @@ class Solver:
                     future_interpretation.flip(var)
                     flips_cost.append(self.cost_diff(self.best_interpretation, future_interpretation, abs(var)))
                     future_interpretation.flip(var)
-                if min(flips_cost) > 0 and random() < 0.8:  # Random walk
+                if min(flips_cost) > 0 and random() < self.p:  # Random walk
                     var = choice(unsat_clause)
                     future_interpretation.flip(var)
                     self.best_cost += self.cost_diff(self.best_interpretation, future_interpretation, abs(var))
@@ -90,10 +95,11 @@ class Solver:
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        sys.exit("Incorrect number of arguments, usage: ./walksat_solver.py 'input_file'\n")
+        sys.exit("Incorrect number of arguments, usage: ./sadSAT.py 'input_file'\n")
 
     parser = Parser(sys.argv[1])
     solver = Solver(parser)
     solution = solver.solve()
-    solver.show()
+    if solver.best_cost == 0:
+        solver.show()
     #print(solution.is_solution())
