@@ -1,4 +1,4 @@
-class Parser:
+class Parser():
 
     def __init__(self, inputfile):
         self.num_vars = 0
