@@ -27,6 +27,8 @@ class Interpretation:
             index = var
             if index > 0:
                 index -= 1
+            if self.problem[index] is None:
+                continue
             for n_clause in self.problem[index]:
                 self.satisfied_clauses[n_clause - 1] =  True
 
@@ -48,6 +50,8 @@ class Interpretation:
         var_index = 1
         var_index_reverse = self.num_vars * 2 * (-1)
         for var in self.problem:
+            if var is None:
+                continue
             if clause_index in var:
                 if var_index <= (self.num_vars):
                     unsat_clause.append(var_index)
@@ -55,8 +59,6 @@ class Interpretation:
                     unsat_clause.append(var_index_reverse)
             var_index += 1
             var_index_reverse += 1
-        print(unsat_clause)
-        print(self.vars)
         return unsat_clause
 
     def show(self):

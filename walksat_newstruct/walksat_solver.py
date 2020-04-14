@@ -39,6 +39,7 @@ class Solver:
         print("s SATISFIABLE")
         self.best_interpretation.show()
 
+
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         sys.exit("Incorrect number of arguments, usage: ./walksat_solver.py 'input_file'\n")

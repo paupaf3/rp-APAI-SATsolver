@@ -1,4 +1,4 @@
-class Parser():
+class Parser:
 
     def __init__(self, inputfile):
         self.num_vars = 0
@@ -17,25 +17,25 @@ class Parser():
                     continue
 
                 if line[0] == "p":
-                    linesplit = line.split()
-                    self.num_clauses = int(linesplit[3])
-                    self.num_vars = int(linesplit[2])
+                    line_split = line.split()
+                    self.num_clauses = int(line_split[3])
+                    self.num_vars = int(line_split[2])
                     self.vars = [None] * self.num_vars * 2
                     continue
 
                 clause += 1
-                linesplit = line.split()
-                linesplit.pop()
+                line_split = line.split()
+                line_split.pop()
 
-                for literal in linesplit:
+                for literal in line_split:
                     literal = int(literal)
                     if str(literal).startswith('-'):
-                        if self.vars[literal] == None:
+                        if self.vars[literal] is None:
                             self.vars[literal] = [clause]
                         else:
                             self.vars[literal].append(clause)
                     else:
-                        if self.vars[literal-1] == None:
+                        if self.vars[literal-1] is None:
                             self.vars[literal-1] = [clause]
                         else:
                             self.vars[literal-1].append(clause)
