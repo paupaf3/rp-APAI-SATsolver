@@ -45,7 +45,7 @@ class Interpretation:
                 else:
                     length -= 1
                 if length == 0:
-                    cost *= 1
+                    cost += 1
         return cost
 
     def copy(self):

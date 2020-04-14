@@ -5,8 +5,8 @@ from parser import Parser
 from interpretation import Interpretation
 from random import random, choice
 
-max_tries = 10000
-max_flips = 10000
+max_tries = 25000
+max_flips = 2000
 
 
 class Solver:
@@ -30,9 +30,12 @@ class Solver:
                     future_interpretation.flip(var)
                     flips_cost.append(self.cost_diff(self.best_interpretation, future_interpretation, abs(var)))
                     future_interpretation.flip(var)
-                if min(flips_cost) > 0 and random() < 0.5:  # Random walk
-                    actual_flip = choice(unsat_clause)
-                    self.best_interpretation.flip(actual_flip)
+                if min(flips_cost) > 0 and random() < 0.8:  # Random walk
+                    var = choice(unsat_clause)
+                    future_interpretation.flip(var)
+                    self.best_cost += self.cost_diff(self.best_interpretation, future_interpretation, abs(var))
+                    future_interpretation.flip(var)
+                    self.best_interpretation.flip(var)
                 else:
                     flip_index = flips_cost.index(min(flips_cost))
                     self.best_interpretation.flip(unsat_clause[flip_index])  # Flip the
@@ -48,20 +51,22 @@ class Solver:
 
     def cost_diff(self, actual, future, var):
         cost = 0
-        for clause in Interpretation.var_distribution[var - 1]:
-            is_sat_future = future.is_satisfied(clause)
-            is_sat_now = actual.is_satisfied(clause)
-            if is_sat_now and not is_sat_future:
-                cost += 1
-            if not is_sat_now and is_sat_future:
-                cost -= 1
-        for clause in Interpretation.var_distribution[-var]:
-            is_sat_future = future.is_satisfied(clause)
-            is_sat_now = actual.is_satisfied(clause)
-            if is_sat_now and not is_sat_future:
-                cost += 1
-            if not is_sat_now and is_sat_future:
-                cost -= 1
+        if Interpretation.var_distribution[var - 1] is not None:
+            for clause in Interpretation.var_distribution[var - 1]:
+                is_sat_future = future.is_satisfied(clause)
+                is_sat_now = actual.is_satisfied(clause)
+                if is_sat_now and not is_sat_future:
+                    cost += 1
+                if not is_sat_now and is_sat_future:
+                    cost -= 1
+        if Interpretation.var_distribution[-var] is not None:
+            for clause in Interpretation.var_distribution[-var]:
+                is_sat_future = future.is_satisfied(clause)
+                is_sat_now = actual.is_satisfied(clause)
+                if is_sat_now and not is_sat_future:
+                    cost += 1
+                if not is_sat_now and is_sat_future:
+                    cost -= 1
         return cost
 
     @staticmethod
@@ -91,3 +96,4 @@ if __name__ == '__main__':
     solver = Solver(parser)
     solution = solver.solve()
     solver.show()
+    #print(solution.is_solution())
