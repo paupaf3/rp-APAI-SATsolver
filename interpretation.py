@@ -4,18 +4,13 @@ import sys
 
 class Interpretation:
     problem = []  # Static variable to represent the problem variables
+    var_distribution = []  # Each position represents a variable, the list inside represents in which clause that
+    # variable appears
 
-    def __init__(self, num_vars=0, vars=None):
-        if vars is None:
-            self.vars = list(range(1, num_vars + 1))
-            self.num_vars = len(self.vars)
-            self.get_random_interpretation()
-        else:
-            self.vars = vars
-        if num_vars != 0:
-            self.num_vars = num_vars
-        else:
-            self.num_vars = len(self.vars)
+    def __init__(self, num_vars=0):
+        self.vars = list(range(1, num_vars + 1))
+        self.num_vars = len(self.vars)
+        self.get_random_interpretation()
 
     def get_random_interpretation(self):
         for i in range(self.num_vars):
@@ -43,14 +38,14 @@ class Interpretation:
     def cost(self):
         cost = 0
         for clause in self.problem:
-            length = self.num_vars
-            for var in self.vars:
-                if var in clause:
+            length = len(clause)
+            for var in clause:
+                if var == self.vars[abs(var) - 1]:
                     break
                 else:
                     length -= 1
                 if length == 0:
-                    cost += 1
+                    cost *= 1
         return cost
 
     def copy(self):
@@ -69,14 +64,20 @@ class Interpretation:
 
     def get_unsat_clause(self):
         for clause in self.problem:
-            length = self.num_vars
-            for var in self.vars:
-                if var in clause:
+            length = len(clause)
+            for var in clause:
+                if var == self.vars[abs(var) - 1]:
                     break
                 else:
                     length -= 1
                 if length == 0:
                     return clause
+
+    def is_satisfied(self, clause_number):
+        for var in self.problem[clause_number - 1]:
+            if var == self.vars[abs(var) - 1]:
+                return True
+        return False
 
     def flip(self, var):
         self.vars[abs(var) - 1] *= -1
